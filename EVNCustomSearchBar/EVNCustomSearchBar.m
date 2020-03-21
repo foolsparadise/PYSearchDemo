@@ -42,7 +42,7 @@
 {
     [super layoutSubviews];
     [self sizeToFit];
-    //NSLog(@"_textField.width.frame=%@", NSStringFromCGRect(self.frame));
+    NSLog(@"_textField.width.frame=%@", NSStringFromCGRect(self.frame));
 }
 
 /**
@@ -60,7 +60,7 @@
     if (!_isHiddenCancelButton)
     {
         [self addSubview:self.cancelButton];
-//        self.cancelButton.hidden = YES;
+        self.cancelButton.hidden = YES;
     }
 
     [self addSubview:self.textField];
@@ -81,7 +81,7 @@
         _cancelButton.frame = CGRectMake(self.frame.size.width-60, 7, 60, 30);
         _cancelButton.titleLabel.font = [UIFont systemFontOfSize:14.0f];
         [_cancelButton addTarget:self action:@selector(cancelButtonTouched) forControlEvents:UIControlEventTouchUpInside];
-        [_cancelButton setTitle:NSStringLocalizedInfoPlist(@"@取消") forState:UIControlStateNormal];
+        [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _cancelButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     }
@@ -130,8 +130,8 @@
     if (!_iconImgButton)
     {
         _iconImgButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _iconImgButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0); // 参数分别是top, left, bottom, right
-        _iconImgButton.frame = CGRectMake(0, 0, 10, 10);
+        _iconImgButton.imageEdgeInsets = UIEdgeInsetsMake(5, 7, 5, 7); // 参数分别是top, left, bottom, right
+        _iconImgButton.frame = CGRectMake(5, 5, _textField.frame.size.height + 4, _textField.frame.size.height);
         _iconImgButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _iconImgButton;
@@ -155,8 +155,8 @@
     if (_iconAlign == EVNCustomSearchBarIconAlignCenter && ([self.text isKindOfClass:[NSNull class]] || !self.text || [self.text isEqualToString:@""] || self.text.length == 0) && ![_textField isFirstResponder])
     {
         self.iconCenterImgButton.hidden = NO;
-        //_textField.frame = CGRectMake(7, 7, self.frame.size.width - 7*2, 30);
-        _textField.textAlignment = NSTextAlignmentLeft;
+        _textField.frame = CGRectMake(7, 7, self.frame.size.width - 7*2, 30);
+        _textField.textAlignment = NSTextAlignmentCenter;
 
         CGSize titleSize; // 输入的内容或者placeholder数据
 
@@ -166,14 +166,13 @@
         CGFloat x = _textField.frame.size.width/2.f - titleSize.width/2.f - 30;
         [self.iconCenterImgButton setImage:_iconImage forState:UIControlStateNormal];
         _iconCenterImgButton.frame = CGRectMake(x > 0 ?x:0, 0, self.iconImgButton.frame.size.width, self.iconImgButton.frame.size.height);
-        _iconCenterImgButton.hidden = NO;
-        [_iconImgButton setImage:_iconImage forState:UIControlStateNormal];
-        _textField.leftView = _iconImgButton;
-        _textField.leftViewMode =  UITextFieldViewModeAlways;
+        _iconCenterImgButton.hidden = x > 0 ? NO : YES;
+        _textField.leftView = x > 0 ? nil : _iconImgButton;
+        _textField.leftViewMode =  x > 0 ? UITextFieldViewModeNever : UITextFieldViewModeAlways;
     }
     else
     {
-        _iconCenterImgButton.hidden = NO;
+        _iconCenterImgButton.hidden = YES;
         _textField.textAlignment = NSTextAlignmentLeft;
         [_iconImgButton setImage:_iconImage forState:UIControlStateNormal];
         _textField.leftView = _iconImgButton;
@@ -369,11 +368,11 @@
     }
     if (!_isHiddenCancelButton)
     {
-//        [UIView animateWithDuration:0.1 animations:^{
-//            _cancelButton.hidden = YES;
-//            _textField.frame = CGRectMake(7, 7, self.frame.size.width - 7*2, 30);
-//            // _textField.transform = CGAffineTransformMakeTranslation(-_cancelButton.frame.size.width,0);
-//        }];
+        [UIView animateWithDuration:0.1 animations:^{
+            _cancelButton.hidden = YES;
+            _textField.frame = CGRectMake(7, 7, self.frame.size.width - 7*2, 30);
+            // _textField.transform = CGAffineTransformMakeTranslation(-_cancelButton.frame.size.width,0);
+        }];
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(searchBarTextDidEndEditing:)])
     {
@@ -422,14 +421,14 @@
     if ([object isEqual:self] && [keyPath isEqualToString:@"frame"])
     {
         // _textField.frame = CGRectMake(7, 7, self.frame.size.width - 7*2, 30);
-        //NSLog(@"----%f", self.frame.size.width);
+        NSLog(@"----%f", self.frame.size.width);
         [self ajustIconWith:_iconAlign];
     }
 }
 
 - (void)dealloc
 {
-    //NSLog(@"class: %@ function:%s", NSStringFromClass([self class]), __func__);
+    NSLog(@"class: %@ function:%s", NSStringFromClass([self class]), __func__);
     [self removeObserver:self forKeyPath:@"frame"];
 }
 
