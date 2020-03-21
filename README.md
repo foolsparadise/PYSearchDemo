@@ -6,5 +6,6 @@ PYSearch + tableview上拉分页添加 ViewController
 #### usage
 ```  
 [self.navigationController pushViewController:[itPYSearchViewController new] animated:YES];  
+//然后,修改itPYSearchViewController.m文件中的几处todo  
 ```  
 
