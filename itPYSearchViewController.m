@@ -19,26 +19,39 @@
 #define iOSVersionGreaterThanOrEqualTo(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 @implementation itPYSearchViewController
 
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.tabBarController.tabBar.hidden = YES;
     
     // 弹出键盘
     [self.searchBar becomeFirstResponder];
+    
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.tabBarController.tabBar.hidden = NO;
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    self.view.backgroundColor = [UIColor whiteColor];//[UIColor colorWithRed:0.98 green:0.98 blue:0.98 alpha:0.99];
     __weak typeof(self) weakSelf = self;
+    
     self.PYSearchPage = 1;
     self.PYSearchPagesize = 20;
     
     [self.view addSubview:self.searchBar];
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.view.mas_left);
+        make.left.mas_equalTo(weakSelf.view.mas_left).mas_offset(10);
+        make.right.mas_equalTo(weakSelf.view.mas_right).mas_offset(-10);
         make.top.mas_equalTo(weakSelf.view.mas_top).mas_offset(APP_STATUSBAR_HEIGHT);
-        make.right.mas_equalTo(weakSelf.view.mas_right);
         make.bottom.mas_equalTo(weakSelf.view.mas_top).mas_offset(APP_STATUSBAR_HEIGHT+50);
     }];
     [self initSearchBar];
@@ -99,8 +112,8 @@
     {
 //        _searchBar = [[EVNCustomSearchBar alloc] initWithFrame:CGRectMake(0, 0, kEVNScreenWidth, kEVNScreenNavigationBarHeight)];
         _searchBar = [EVNCustomSearchBar new];
-        _searchBar.backgroundColor = [UIColor clearColor]; // 清空searchBar的背景色
-        _searchBar.iconImage = [UIImage imageNamed:@"EVNCustomSearchBar.bundle/searchImageBlue.png"];;
+        _searchBar.backgroundColor = [UIColor whiteColor]; // 清空searchBar的背景色
+        _searchBar.iconImage = [UIImage imageNamed:@"EVNCustomSearchBar.bundle/searchImageDark.png"];;
         _searchBar.iconAlign = EVNCustomSearchBarIconAlignCenter;
         [_searchBar setPlaceholder:NSStringLocalizedInfoPlist(@"  在此输入搜索关键字")];  // 搜索框的占位符
         _searchBar.placeholderColor = [self colorWithHexString:@"#666666" alpha:1.0];
